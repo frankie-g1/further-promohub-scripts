@@ -8,3 +8,4 @@ dependencies:
     - google-auth-httplib2
     - numpy
     - pandas
+    - firebase-admin
