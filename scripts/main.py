@@ -3,12 +3,24 @@ from firebase_admin import credentials
 from firebase_admin import firestore
 
 from storagemgmt.promocodes.youtube.CRUD.write import Write
+from storagemgmt.promocodes.youtube.CRUD.read import Read
+
 from storagemgmt.schema.collections.video import Video
+from storagemgmt.schema.collections.channel import Channel
 
 
-def writeVideoDocumentToVideosCollection():
-    video = Video(video_id = 101, video_link="pretend_link", video_name="my first video!", promocode="newpromocode")
-    Write.writeVideoDocumentToVideosCollection(db, channelID="channelID: <exampleGoogleDevChannelID>", Video=video)
+
+
+def writeVideoDocumentToVideosCollection(channel, video):
+    Write.writeVideoDocumentToVideosCollection(db, dChannel=channel, dVideo=video)
+
+
+def createChannelDocument(channel):
+    Write.writeChannelDocumentID(db, dChannel=channel)
+
+
+def readDocumentsFromDchannelVideosCollection(channel):
+    Read.readVideoDocumentsInChannelDocument(db, dChannel=channel)
 
 
 if __name__ == "__main__":
@@ -18,4 +30,8 @@ if __name__ == "__main__":
     app = firebase_admin.initialize_app(cred)
     db = firestore.client()
 
-    
+    channel = Channel(channelID="a second channel")
+    video = Video(video_id = 201, video_link="pretend_link", video_name="first video", promocode="second channel promocode")
+    createChannelDocument(channel)
+    writeVideoDocumentToVideosCollection(channel, video)
+    readDocumentsFromDchannelVideosCollection(channel)
